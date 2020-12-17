@@ -1,0 +1,56 @@
+openapi: 3.0.0
+
+info:
+  title: api-teste-anotaAI
+  description: documentação da api de teste Anota AI
+  contact:
+    name: Jonathan
+  license:
+    name: Todos os direitos reservados
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:{port}/noauth
+    escription: Servidor locar
+    variables:
+      port:
+        default: "8080"
+        description: Essa é a posta que o servidor está escutando
+
+paths:
+  /products:
+    get:
+      description: Retorna todos os produtos cadastrados
+      responses:
+        "200":
+          description: Retornou todos os produtos com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/product"
+components:
+  schemas:
+    product:
+      type: object
+      properties:
+        _id:
+          description: "ID criado automaticamente pelo mongo"
+          type: number
+        title:
+          description: "nome do produto"
+          type: string
+        description:
+          description: "Descrição do produto"
+          type: string
+        price:
+          description: "Preço do produto"
+          type: number
+        category:
+          description: "Categoria do produto"
+          type: string
+
+        
+
+
+
+

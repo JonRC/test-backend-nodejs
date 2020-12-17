@@ -58,14 +58,10 @@ module.exports = {
     const conditions = { id }
 
     changeStatus = await productServices.changeProduct(conditions, productUpdates)
-    console.log(changeStatus)
     response.send({changeStatus})
 
   }
 
-  
-  
-  
 }
 
  
