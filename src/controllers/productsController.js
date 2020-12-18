@@ -57,10 +57,11 @@ module.exports = {
     const { id } = request.params;
     const conditions = { id }
 
-    changeStatus = await productServices.changeProduct(conditions, productUpdates)
-    response.send({changeStatus})
+    changedProduct = await productServices.changeProduct(conditions, productUpdates)
+    response.send({changedProduct})
 
-  }
+  },
+
 
 }
 

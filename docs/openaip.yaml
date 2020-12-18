@@ -19,35 +19,183 @@ servers:
 
 paths:
   /products:
-    get:
-      description: Retorna todos os produtos cadastrados
+    post:
+      summary: Registra um produto no banco de dados
+      description: Registra um produto no banco de dados
+      requestBody:
+        description: Objeto que representa o produto a ser cadatrado
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/requiredProduct"
       responses:
         "200":
-          description: Retornou todos os produtos com sucesso
+          description: Retorna o produto cadatrado
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/product"
+                $ref: "#/components/schemas/returnedProduct"
+
+
+    get:
+      summary: Retorna os produtos da categoria ou titulo solicitado
+      description: Caso não informar nenhum parâmetro, retorna todos produtos
+      parameters:
+        - in: query
+
+          name: category
+          schema:
+            type: string
+          description: Nome da categoria do produto
+        - in: query
+
+          name: title
+          schema:
+            type: string
+          description: Nome do títudo do produto
+
+      responses:
+        "200":
+          description: Retorno o produto com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/returnedProduct"
+    
+                
+              
+
+
+  /products/{id}:
+    get:
+      summary: Retorna o produto por id
+      description: Retorna o produto por id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: id do produto
+      responses:
+        "200":
+          description: Retorno o produto com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/returnedProduct"
+
+      put:
+        summary: Altera propriedades dos produtos
+        description: Altera somente as propriedades passadas no body
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: string
+            description: id do produto
+        requestBody:
+          description: Somente as propriedades que serão alteradas
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/requiredProduct"
+
+    delete:
+      summary: Deleta um produto por id
+      description: Deleta um produto por id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: id do produto
+      responses:
+        "200":
+          description: Número de produtos apagados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deletedCount:
+                    type: number
+                    example: 1
+                    description: número de items apagados
+
+
+  
 components:
   schemas:
-    product:
+    returnedProduct:
       type: object
       properties:
         _id:
           description: "ID criado automaticamente pelo mongo"
           type: number
+          example: "ObjectId('5fda017c9a74210880c0668f')"
         title:
           description: "nome do produto"
           type: string
+          example: "Notebook Bolado"
         description:
           description: "Descrição do produto"
           type: string
+          example: "Notebook RTX 3080 SSD 126GB"
         price:
           description: "Preço do produto"
           type: number
+          example: 4000.00
         category:
           description: "Categoria do produto"
           type: string
+          example: "Notebooks"
+        requiredProduct:
+          type: object
+    requiredProduct:
+      type: object
+      properties:
+        title:
+          description: "nome do produto"
+          type: string
+          example: "Notebook Bolado"
+        description:
+          description: "Descrição do produto"
+          type: string
+          example: "Notebook RTX 3080 SSD 126GB"
+        price:
+          description: "Preço do produto"
+          type: number
+          example: 4000.00
+        category:
+          description: "Categoria do produto"
+          type: string
+          example: "Notebooks"
+        requiredProduct:
+          type: object
+
+  properties:
+    title:
+      description: "nome do produto"
+      type: string
+      example: "Notebook Bolado"
+    description:
+      description: "Descrição do produto"
+      type: string
+      example: "Notebook RTX 3080 SSD 126GB"
+    price:
+      description: "Preço do produto"
+      type: number
+      example: 4000.00
+    category:
+      description: "Categoria do produto"
+      type: string
+      example: "Notebooks"
+
 
         
 
