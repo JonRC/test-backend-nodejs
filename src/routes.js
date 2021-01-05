@@ -1,14 +1,13 @@
 const {Router} = require('express')
 const controller = require('./controllers/productsController')
+const noAuthRoutes = require("./services/routes")
 
-const routes = Router()
+const router = Router()
 
-routes.post("/products", controller.createProduct)
-routes.put("/products/:id", controller.updateProduct)
-routes.get("/products", controller.listProducts)
-routes.get("/products/:id", controller.findProduct)
-routes.delete("/products/:id", controller.deleteProduct)
+
+
+router.use("/noauth", noAuthRoutes.router)
 
 module.exports = {
-  routes
+  router
 };

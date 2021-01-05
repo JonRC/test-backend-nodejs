@@ -1,13 +1,9 @@
-const { Sequelize } = require('sequelize');
-const path = require('path')
-
-const database = new Sequelize({
-  dialect: 'sqlite',
-  storage: path.join(__dirname, "data.sqlite")
-});
-
+const mongoose = require('mongoose')
 
 module.exports = {
-  database
+  async connect(){
+    await mongoose.connect('mongodb+srv://jonathan:anotaai2020@cluster0.xkmxz.mongodb.net/testeDB?retryWrites=true&w=majority')
+    const status = mongoose.connection.readyState
+    return status
+  }
 }
-

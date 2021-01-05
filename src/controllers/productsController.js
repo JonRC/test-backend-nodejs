@@ -1,5 +1,5 @@
-const {products} = require('../../models/products')
-
+const productsServices = require('../services/noauth/productsServices')
+const productServices = require('../services/noauth/productsServices')
 
 
 module.exports = {
@@ -14,15 +14,14 @@ module.exports = {
       category
     } = request.body
 
-    await products.create({
-      title,
-      description,
-      price,
-      category
-    }).then( product => {
-      product ? response.send(product) : response.status(400)
-                
-    })
+    productServices.registerProduct(title, description, price, category)
+      .then(registerInformation => response.send(registerInformation))
+      .then(() => response.status(200))
+      .catch(error =>{
+        console.log(error)
+        response.status(500)
+      })
+
     
   },
 
@@ -33,78 +32,37 @@ module.exports = {
     querys.title && (conditions.title = querys.title)
     querys.category && (conditions.category = querys.category)
 
-    console.log(conditions)
-
-
-    await products.findAll({
-      where: conditions
-    })
-      .then(productInstance => JSON.stringify(productInstance, null, 2))
-      .then(productList => response.send(productList))
-      .catch(error => {
-        response.status(500)
-        response.send(error)
-        console.log(error)
-      })
-    
+    productsFound = await productServices.listProducts(conditions)
+    productsFound ? response.send(productsFound) : response.send('error')
   },
 
   async findProduct (request, response){
     const { id } = request.params;
+    const conditions = { id } 
 
-    await products.findAll({
-      where: {
-        id
-      }
-    })
-      .then(product => response.send(product))
+    productsFound = await productServices.listProducts(conditions)
+    productsFound ? response.send(productsFound) : send.status(500)
   },
 
   async deleteProduct (request, response){
     const { id } = request.params;
+    conditions = { id }
+    deletedCount = await productsServices.deleteProduct(conditions)
 
-    const product = await products.findAll({
-      where: {
-        id
-      }
-    })
-
-    await products.destroy({
-      where: {
-        id
-      }
-    })
-      .then(() => response.send(product))
-      .catch(error => {
-        response.send(error)
-        response.status(500)
-      })
-
+    response.send({deletedCount})
   },
 
   async updateProduct (request, response){
     const productUpdates = request.body
     const { id } = request.params;
+    const conditions = { id }
 
-    await products.update(productUpdates, {
-      where: {
-        id
-      }
-    })
-      .then(() => response.status(200))
-      .catch(error => {
-        response.send(error)
-        response.status(500)
-      })
+    changedProduct = await productServices.changeProduct(conditions, productUpdates)
+    response.send({changedProduct})
 
-    response.send("ok")
+  },
 
-      
-  }
 
-  
-  
-  
 }
 
  
